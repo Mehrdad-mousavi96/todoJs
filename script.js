@@ -1,40 +1,53 @@
+const ENTER_KEY = 13
 
 class Todo {
-    constructor(todoInputId, todoListId) {
-        this.todoInput = document.getElementById(todoInputId);
-        this.todoDiv = document.getElementById(todoListId)
-        this.todos = ['Read the book', 'Todo 2']
+  constructor(todoInputId, todoListId) {
+    this.todoInput = document.getElementById(todoInputId);
+    this.todoDiv = document.getElementById(todoListId);
+    this.todos = [];
 
-        this.render()
+    this.todoInput.addEventListener('keyup', event => {
+      if (event.keyCode == 13) {
+        this.addTodo();
+      }
+    })
+
+    this.render();
+  }
+
+  render() {
+    const todoOutput = document.createElement("ul");
+
+    for (const todo of this.todos) {
+      todoOutput.append(this.renderTodo(todo));
     }
+    this.todoDiv.innerText = "";
+    this.todoDiv.append(todoOutput);
+  }
 
-    render() {
-        const todoOutput = document.createElement('ul')
+  addTodo() {
+    const todo = this.todoInput.value;
+    this.todoInput.value = '';
+    this.todos.push(todo);
+    this.render()
+  }
 
-        for (const todo of this.todos) {
-            todoOutput.append(this.renderTodo(todo))
-        }
-        this.todoDiv.innerText = ''
-        this.todoDiv.append(todoOutput)
-    }
+  renderTodo(todo) {
+    const li = document.createElement("li");
+    const span = document.createElement("span");
+    const deleteLink = document.createElement("a");
 
-    renderTodo(todo) {
-        const li = document.createElement('li')
-        const span = document.createElement('span')
-        const deleteLink = document.createElement('a')
+    span.classList.add("actions");
+    deleteLink.classList.add("delete");
 
-        span.classList.add('actions')
-        deleteLink.classList.add('delete')
+    deleteLink.innerText = "Delete";
+    li.innerText = todo;
 
-        deleteLink.innerText = "Delete"
-        li.innerText = todo
+    span.append(deleteLink);
+    li.append(span);
 
-        span.append(deleteLink);
-        li.append(span)
-
-        return li
-    }
+    return li;
+  }
 }
 
-
-new Todo('todo-input', 'todo-list')
+new Todo("todo-input", "todo-list");
